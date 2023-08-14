@@ -1,1 +1,34 @@
-<p>podcast-list works!</p>
+<div class="podcast-list">
+  <div class="filter">
+    <span>100</span>
+    <form>
+      <mat-form-field appearance="outline">
+        <mat-label>Podcasts</mat-label>
+        <input
+          type="text"
+          placeholder="Search..."
+          matInput
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div class="card-wrapper">
+    <mat-card class="card">
+      <div class="image">
+        <img mat-card-sm-image src="https://images.pexels.com/photos/5732474/pexels-photo-5732474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+      </div>
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title></mat-card-title>
+          <mat-card-subtitle>Author:</mat-card-subtitle>
+        </mat-card-title-group>
+      </mat-card-header>
+    </mat-card>
+  </div>
+  <div class="button">
+    <button mat-button>Load more...</button>
+  </div>
+</div>

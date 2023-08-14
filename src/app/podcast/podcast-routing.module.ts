@@ -13,7 +13,7 @@ const routes: Routes = [
       { path: 'episodes', component: EpisodeDetailsComponent },
     ], */
   },
-  { path: 'details/:id', component: PodcastDetailsComponent },
+  { path: 'details', component: PodcastDetailsComponent },
   { path: 'episodes', component: EpisodeDetailsComponent },
 ];
 

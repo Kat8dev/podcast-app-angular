@@ -1,0 +1,73 @@
+.podcast-list {
+  margin: 2rem;
+  .card-wrapper {
+    margin: auto;
+    max-width: 850px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .filter {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    mat-form-field {
+      flex-direction: row;
+    }
+    span {
+      background-color: rgb(18, 106, 222);
+      color: white;
+      padding: 1px 4px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: large;
+      text-align: center;
+    }
+  }
+  .button {
+    padding-top: 2rem;
+    width: fit-content;
+    margin: auto;
+  }
+}
+
+.card {
+  margin-top: 3rem;
+  padding-bottom: 10px;
+  width: 200px;
+  max-height: fit-content;
+  max-width: 200px;
+  cursor: pointer;
+  mat-card-header {
+    margin-top: 2rem;
+    mat-card-title-group {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      mat-card-title {
+        text-transform: uppercase;
+        font-size: small;
+        line-height: normal;
+      }
+      mat-card-subtitle {
+        line-height: normal;
+        margin-top: 5px;
+      }
+    }
+  }
+  .image {
+    position: relative;
+    img {
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      bottom: 50%;
+      transform: translate(-50%, 50%);
+      z-index: 0;
+    }
+  }
+}

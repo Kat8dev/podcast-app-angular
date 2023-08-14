@@ -1,0 +1,32 @@
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .image {
+    img {
+      margin: 7px 20px 16px;
+      max-width: 150px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+  .title {
+    padding-top: 16px;
+    width: 100%;
+    .mat-divider {
+      margin-top: 16px;
+    }
+    mat-card-title {
+      cursor: pointer;
+    }
+    mat-card-subtitle {
+      cursor: pointer;
+    }
+  }
+  .desc {
+    padding-top: 16px;
+  }
+  mat-card-subtitle {
+    font-style: italic;
+  }
+}

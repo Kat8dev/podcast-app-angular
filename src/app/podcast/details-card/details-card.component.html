@@ -1,1 +1,24 @@
-<p>details-card works!</p>
+<mat-card>
+  <mat-card-content>
+    <div class="image">
+      <img
+        routerLink="/"
+        mat-card-image
+        src="https://images.pexels.com/photos/5732474/pexels-photo-5732474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        alt="Photo of a Shiba Inu"
+      />
+      <mat-divider></mat-divider>
+    </div>
+
+    <div class="title">
+      <mat-card-title routerLink="/">artist</mat-card-title>
+      <mat-card-subtitle routerLink="/">title</mat-card-subtitle>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div class="desc">
+      <mat-card-title>Description</mat-card-title>
+      <mat-card-subtitle>description</mat-card-subtitle>
+    </div>
+  </mat-card-content>
+</mat-card>

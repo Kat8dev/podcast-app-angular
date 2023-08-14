@@ -1,0 +1,49 @@
+@import "../../../variables";
+
+p {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  mat-toolbar {
+    background-color: #fff;
+    color: $color-blue;
+    display: flex;
+    justify-content: space-between;
+    span {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .navigation-indicator {
+      position: relative;
+      width: 15px;
+      height: 15px;
+      background-color: #548fb9;
+      border-radius: 50%;
+      /* animation: blink 1s infinite; */
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        background-color: $color-blue;
+        border-radius: 50%;
+        border: solid 1px #3d3e3e;
+        z-index: 1;
+      }
+    }
+
+    @keyframes blink {
+      0%,
+      50%,
+      100% {
+        opacity: 0;
+      }
+      25%,
+      75% {
+        opacity: 1;
+      }
+    }
+  }
+}
