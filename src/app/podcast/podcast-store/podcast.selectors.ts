@@ -24,3 +24,13 @@ export const selectDetails = createSelector(
   selectDetailsState,
   state => state.details
 );
+
+export const selectDetailsLoading = createSelector(
+  selectDetailsState,
+  state => state.loading
+);
+
+export const selectDetailsError = createSelector(
+  selectDetailsState,
+  state => state.error
+);

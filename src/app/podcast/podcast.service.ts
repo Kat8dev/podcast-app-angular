@@ -7,10 +7,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class PodcastService {
 
-  private title = new BehaviorSubject<string>('');
-  private description = new BehaviorSubject<string>('');
-  private image = new BehaviorSubject<string>('');
-  private artist = new BehaviorSubject<string>('');
+  private title = new BehaviorSubject<string>(localStorage.getItem('title') || '');
+  private description = new BehaviorSubject<string>(localStorage.getItem('description') || '');
+  private image = new BehaviorSubject<string>(localStorage.getItem('image') || '');
+  private artist = new BehaviorSubject<string>(localStorage.getItem('artist') || '');
   private isNavigation = new BehaviorSubject<boolean>(false);
 
   currentTitle = this.title.asObservable();
@@ -23,18 +23,22 @@ export class PodcastService {
 
   setTitle(title: string) {
     this.title.next(title);
+    localStorage.setItem('title', title);
   }
 
   setDescription(description: string) {
     this.description.next(description);
+    localStorage.setItem('description', description);
   }
 
-  setImage(description: string) {
-    this.image.next(description);
+  setImage(image: string) {
+    this.image.next(image);
+    localStorage.setItem('image', image);
   }
 
   setArtist(artist: string) {
     this.artist.next(artist);
+    localStorage.setItem('artist', artist);
   }
 
   setIsNavigation(value: boolean) {

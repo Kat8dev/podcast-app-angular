@@ -1,7 +1,7 @@
 <p>
   <mat-toolbar>
     <span routerLink="/">Podcaster</span>
-    <span class="navigation-indicator">
+    <span class="navigation-indicator" *ngIf="(isNavigation$ | async)">
       <span></span>
     </span>
   </mat-toolbar>

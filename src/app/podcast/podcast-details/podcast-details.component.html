@@ -1,22 +1,31 @@
-
 <div class="details-wrapper">
-
   <app-details-card class="left"></app-details-card>
 
-  <div class="right">
+  <div class="spinner" *ngIf="loading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div
+    *ngIf="!(error$ | async); else errorTemplate"
+    class="right"
+  >
     <mat-card>
-      <mat-card-content>Episodes {{episodeNumber}}</mat-card-content>
+      <mat-card-content>Episodes {{ episodeNumber }}</mat-card-content>
     </mat-card>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container matColumnDef="Title">
         <th mat-header-cell *matHeaderCellDef>Title</th>
-        <td mat-cell *matCellDef="let element"><span class="title">{{ element.trackName }}</span></td>
+        <td mat-cell *matCellDef="let element">
+          <span class="title">{{ element.trackName }}</span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="Date">
         <th mat-header-cell *matHeaderCellDef>Date</th>
-        <td mat-cell *matCellDef="let element">{{ element.releaseDate }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.releaseDate }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="Duration">
@@ -38,4 +47,9 @@
     >
     </mat-paginator>
   </div>
+
+  <ng-template #errorTemplate>
+    <div>Error loading podcasts.</div>
+    <!-- TODO: Improve ui of error template -->
+  </ng-template>
 </div>
