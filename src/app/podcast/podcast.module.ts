@@ -6,6 +6,7 @@ import { EpisodeDetailsComponent } from './episode-details/episode-details.compo
 import { DetailsCardComponent } from './details-card/details-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { PodcastRoutingModule } from './podcast-routing.module';
+import { PodcastStoreModule } from './podcast-store.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PodcastRoutingModule } from './podcast-routing.module';
     CommonModule,
     SharedModule,
     PodcastRoutingModule,
+    PodcastStoreModule
   ]
 })
 export class PodcastModule { }

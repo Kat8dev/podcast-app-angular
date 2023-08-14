@@ -8,6 +8,7 @@
           type="text"
           placeholder="Search..."
           matInput
+          [formControl]="form"
           [matAutocomplete]="auto"
         />
         <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
@@ -15,20 +16,42 @@
     </form>
   </div>
 
-  <div class="card-wrapper">
-    <mat-card class="card">
-      <div class="image">
-        <img mat-card-sm-image src="https://images.pexels.com/photos/5732474/pexels-photo-5732474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+  <div class="spinner" *ngIf="loading$ | async; else podcastList">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <ng-template #podcastList>
+    <div *ngIf="!(error$ | async); else errorTemplate">
+      <div class="card-wrapper" *ngIf="filteredPodcasts$ | async as podcasts">
+        <mat-card
+          class="card"
+          *ngFor="let podcast of podcasts"
+          (click)="onCardClick(podcast)"
+          [routerLink]="['details', podcast.id.attributes['im:id']]"
+        >
+          <div class="image">
+            <img mat-card-sm-image [src]="podcast['im:image'][0].label" />
+          </div>
+          <mat-card-header>
+            <mat-card-title-group>
+              <mat-card-title>{{ podcast["im:name"].label }}</mat-card-title>
+              <mat-card-subtitle
+                >Author:{{ podcast["im:artist"].label }}</mat-card-subtitle
+              >
+            </mat-card-title-group>
+          </mat-card-header>
+        </mat-card>
       </div>
-      <mat-card-header>
-        <mat-card-title-group>
-          <mat-card-title></mat-card-title>
-          <mat-card-subtitle>Author:</mat-card-subtitle>
-        </mat-card-title-group>
-      </mat-card-header>
-    </mat-card>
-  </div>
-  <div class="button">
-    <button mat-button>Load more...</button>
-  </div>
+      <div class="button">
+        <button *ngIf="loadMoreVisible" (click)="loadMore()" mat-button>
+          Load more...
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #errorTemplate>
+    <div>Error loading podcasts.</div>
+    <!-- TODO: Improve ui of error template -->
+  </ng-template>
 </div>

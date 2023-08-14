@@ -1,30 +1,158 @@
-import { Component } from '@angular/core';
+/* import { Component, OnInit, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectDetails } from '../podcast-store/podcast.selectors';
+import { loadDetails } from '../podcast-store/podcast.actions';
+import { ActivatedRoute } from '@angular/router';
+import { PodcastService } from '../podcast.service';
+import { Observable, map, switchMap } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
 
-export interface PeriodicElement {
-  date: string;
-  title: number;
-  duration: number;
+export interface TableElement {
+  trackName: string;
+  releaseDate: string;
+  duration: string;
+  allData: []
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {title: 1, date: 'Hydrogen', duration: 1.0079},
-  {title: 2, date: 'Helium', duration: 4.0026},
-  {title: 3, date: 'Lithium', duration: 6.941},
-  {title: 4, date: 'Beryllium', duration: 9.0122},
-  {title: 5, date: 'Boron', duration: 10.811},
-  {title: 6, date: 'Carbon', duration: 12.0107},
-  {title: 7, date: 'Nitrogen', duration: 14.0067},
-  {title: 8, date: 'Oxygen', duration: 15.9994},
-  {title: 9, date: 'Fluorine', duration: 18.9984},
-  {title: 10, date: 'Neon', duration: 20.1797},
-];
 
 @Component({
   selector: 'app-podcast-details',
   templateUrl: './podcast-details.component.html',
-  styleUrls: ['./podcast-details.component.scss']
+  styleUrls: ['./podcast-details.component.scss'],
 })
-export class PodcastDetailsComponent {
+export class PodcastDetailsComponent implements OnInit {
   displayedColumns: string[] = ['Title', 'Date', 'Duration'];
-  dataSource = ELEMENT_DATA;
+  dataSource!: Observable<TableElement[]>;
+  title$: Observable<string> = this.podcastService.currentTitle;
+  description$: Observable<string> = this.podcastService.currentDescription;
+  image$: Observable<string> = this.podcastService.currentImage;
+  artist$: Observable<string> = this.podcastService.currentArtist;
+  details$: Observable<any> = this.store.select(selectDetails);
+  podcastId!: number;
+  episodeNumber!: number;
+  tableDetails$: Observable<TableElement[]> = this.route.params.pipe(
+    switchMap((params) => {
+      this.podcastId = +params['id'];
+      return this.store.select(selectDetails);
+    }),
+    map((details: any) => {
+      this.episodeNumber = details.length
+      return (this.dataSource = details.map((detail: any) => ({
+        trackName: detail.trackName,
+        releaseDate: this.formatDate(detail.releaseDate),
+        duration: this.formatTime(detail.trackTimeMillis),
+        allData: detail
+      })));
+    })
+  );
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private podcastService: PodcastService,
+  ) {}
+
+  ngOnInit() {
+    this.tableDetails$.subscribe((item) => console.log(item));
+    this.store.dispatch(loadDetails({ podcastId: this.podcastId }));
+  }
+
+  ngAfterViewInit() {
+    this.dataSource. = this.paginator;
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  formatTime(timeMillis: number): string {
+    const hours = Math.floor(timeMillis / 3600000);
+    const minutes = Math.floor((timeMillis % 3600000) / 60000);
+    return `${hours}:${minutes}`;
+  }
+}
+ */
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectDetails } from '../podcast-store/podcast.selectors';
+import { loadDetails } from '../podcast-store/podcast.actions';
+import { ActivatedRoute } from '@angular/router';
+import { PodcastService } from '../podcast.service';
+import { Observable } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+
+export interface TableElement {
+  trackName: string;
+  releaseDate: string;
+  duration: string;
+  allData: any; // TODO: find out which one is the url for listen music
+}
+
+@Component({
+  selector: 'app-podcast-details',
+  templateUrl: './podcast-details.component.html',
+  styleUrls: ['./podcast-details.component.scss'],
+})
+export class PodcastDetailsComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['Title', 'Date', 'Duration'];
+  dataSource: MatTableDataSource<TableElement> = new MatTableDataSource<TableElement>();
+  podcastId!: number;
+  episodeNumber!: number;
+  title$: Observable<string> = this.podcastService.currentTitle;
+  description$: Observable<string> = this.podcastService.currentDescription;
+  image$: Observable<string> = this.podcastService.currentImage;
+  artist$: Observable<string> = this.podcastService.currentArtist;
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private podcastService: PodcastService,
+  ) {}
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.podcastId = +params['id'];
+      this.store.dispatch(loadDetails({ podcastId: this.podcastId }));
+    });
+
+    this.store.select(selectDetails).subscribe(details => {
+      console.log(details)
+      this.episodeNumber = details.length;
+      this.dataSource.data = details.map((detail: any) => ({
+        trackName: detail.trackName,
+        releaseDate: this.formatDate(detail.releaseDate),
+        duration: this.formatTime(detail.trackTimeMillis),
+        allData: detail
+      }));
+      this.dataSource.paginator = this.paginator;
+    });
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  formatTime(timeMillis: number): string {
+    const hours = Math.floor(timeMillis / 3600000);
+    const minutes = Math.floor((timeMillis % 3600000) / 60000);
+    return `${hours}:${minutes}`;
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 }

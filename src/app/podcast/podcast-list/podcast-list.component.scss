@@ -1,3 +1,5 @@
+@import "../../../variables";
+
 .podcast-list {
   margin: 2rem;
   .card-wrapper {
@@ -19,7 +21,7 @@
       flex-direction: row;
     }
     span {
-      background-color: rgb(18, 106, 222);
+      background-color: $color-blue;
       color: white;
       padding: 1px 4px;
       border-radius: 8px;
@@ -30,6 +32,10 @@
   }
   .button {
     padding-top: 2rem;
+    width: fit-content;
+    margin: auto;
+  }
+  .spinner {
     width: fit-content;
     margin: auto;
   }
