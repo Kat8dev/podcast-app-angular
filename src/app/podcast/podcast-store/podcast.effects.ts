@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import * as PodcastActions from './podcast.actions';
 import { PodcastService } from '../podcast.service';
 import { environment } from 'src/environments/environments';
@@ -21,7 +21,12 @@ export class PodcastEffects {
         }
 
         return this.podcastService.getPodcasts(environment.podcastList).pipe(
-          map((res) => res.feed.entry),
+          switchMap((res: any) => {
+            const parsedContents = JSON.parse(res.contents);
+            const entryArray = parsedContents.feed.entry;
+            this.cacheData(entryArray, 'cachedPodcasts');
+            return of(entryArray);
+          }),
           tap((podcasts) => this.cacheData(podcasts, 'cachedPodcasts')),
           map((podcasts) => PodcastActions.loadPodcastsSuccess({ podcasts })),
           catchError((error) =>
@@ -44,17 +49,21 @@ export class PodcastEffects {
           );
         }
         return this.podcastService
-        .getPodcasts(
-          `${environment.podcastDetails}?id=${actions.podcastId}&media=podcast&entity=podcastEpisode`
-        )
-        .pipe(
-          map((res) => res.results),
-          tap((details) => this.cacheData(details, `podcast${actions.podcastId}`)),
-          map((details) => PodcastActions.loadDetailsSuccess({ details })),
-          catchError((error) =>
-            of(PodcastActions.loadDetailsFailure({ error }))
+          .getPodcasts(
+            `${environment.podcastDetails}?id=${actions.podcastId}&media=podcast&entity=podcastEpisode`
           )
-        )
+          .pipe(
+            switchMap((res: any) => {
+              const parsedContents = JSON.parse(res.contents);
+              const details = parsedContents.results;
+              this.cacheData(details, `podcast${actions.podcastId}`);
+              return of(details);
+            }),
+            map((details) => PodcastActions.loadDetailsSuccess({ details })),
+            catchError((error) =>
+              of(PodcastActions.loadDetailsFailure({ error }))
+            )
+          );
       })
     )
   );

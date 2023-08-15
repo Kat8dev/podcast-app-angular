@@ -6,11 +6,18 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PodcastService {
-
-  private title = new BehaviorSubject<string>(localStorage.getItem('title') || '');
-  private description = new BehaviorSubject<string>(localStorage.getItem('description') || '');
-  private image = new BehaviorSubject<string>(localStorage.getItem('image') || '');
-  private artist = new BehaviorSubject<string>(localStorage.getItem('artist') || '');
+  private title = new BehaviorSubject<string>(
+    localStorage.getItem('title') || ''
+  );
+  private description = new BehaviorSubject<string>(
+    localStorage.getItem('description') || ''
+  );
+  private image = new BehaviorSubject<string>(
+    localStorage.getItem('image') || ''
+  );
+  private artist = new BehaviorSubject<string>(
+    localStorage.getItem('artist') || ''
+  );
   private isNavigation = new BehaviorSubject<boolean>(false);
 
   currentTitle = this.title.asObservable();
@@ -46,14 +53,17 @@ export class PodcastService {
   }
 
   getPodcasts(apiUrl: string): Observable<any> {
-    return this.http.get(apiUrl);
+    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(
+      apiUrl
+    )}`;
+    return this.http.get(url);
   }
 
   getPodcastDetails(apiUrl: string, podcastId: string): Observable<any> {
-    return this.http.get(`${apiUrl}/${podcastId}`);
+    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(
+      `${apiUrl}/${podcastId}`
+    )}`;
+    return this.http.get(url);
   }
 
-  getEpisodeDetails(apiUrl: string, episodeId: string): Observable<any> {
-    return this.http.get(`${apiUrl}/episodes/${episodeId}`);
-  }
 }

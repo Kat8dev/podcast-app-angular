@@ -56,7 +56,6 @@ export class PodcastListComponent implements OnInit {
     this.podcastService.setDescription(podcast.summary.label);
     this.podcastService.setImage(podcast['im:image'][2]?.label);
     this.podcastService.setArtist(podcast['im:artist'].label);
-    /* this.router.navigate(['details', podcast.id.attributes['im:id']]); */
   }
 
   loadMore() {
