@@ -1,10 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import * as PodcastActions from './podcast.actions';
+import { Episode } from '../podcast.model';
 
 export interface DetailsState {
-  details: any[];
+  details: Episode[];
   loading: boolean;
-  error: any;
+  error: any; // TODO: create interface for error
 }
 
 const initialState: DetailsState = {

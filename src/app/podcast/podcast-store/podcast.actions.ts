@@ -20,7 +20,7 @@ export const loadDetails = createAction(
 
 export const loadDetailsSuccess = createAction(
   '[Details] Load Details Success',
-  props<{ details: any }>() // TODO: set adecuate type for props
+  props<{ details: any }>()
 );
 
 export const loadDetailsFailure = createAction(

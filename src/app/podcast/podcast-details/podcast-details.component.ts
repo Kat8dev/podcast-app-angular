@@ -11,6 +11,7 @@ import { PodcastService } from '../podcast.service';
 import { Observable, filter } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Episode } from '../podcast.model';
 
 export interface TableElement {
   trackName: string;
@@ -60,10 +61,10 @@ export class PodcastDetailsComponent implements OnInit, AfterViewInit {
     });
 
     this.store.select(selectDetails).subscribe((details) => {
-      // Exclude the element at index 0
+      // Exclude the element at index 0 as it does not contain episode to listen
       const filteredDetails = details.slice(1);
       this.episodeNumber = filteredDetails.length;
-      this.dataSource.data = filteredDetails.map((detail: any) => ({
+      this.dataSource.data = filteredDetails.map((detail: Episode) => ({
         trackName: detail.trackName,
         releaseDate: this.formatDate(detail.releaseDate),
         duration: this.formatTime(detail.trackTimeMillis),
@@ -74,7 +75,7 @@ export class PodcastDetailsComponent implements OnInit, AfterViewInit {
   }
 
   isChildRouteActive(): boolean {
-    return this.route.firstChild?.routeConfig?.path === 'episodes/:episodeId';
+    return this.route.firstChild?.routeConfig?.path === 'episode/:episodeId';
   }
 
   private updateChildRouteStatus(): void {

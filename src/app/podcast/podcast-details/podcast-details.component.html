@@ -15,7 +15,7 @@
       <ng-container matColumnDef="Title">
         <th mat-header-cell *matHeaderCellDef>Title</th>
         <td mat-cell *matCellDef="let element">
-          <span class="title" [routerLink]="['episodes', element.trackId]">{{
+          <span class="title" [routerLink]="['episode', element.trackId]">{{
             element.trackName
           }}</span>
         </td>

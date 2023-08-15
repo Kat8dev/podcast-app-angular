@@ -52,14 +52,14 @@ export class PodcastService {
     this.isNavigation.next(value);
   }
 
-  getPodcasts(apiUrl: string): Observable<any> {
+  getPodcasts(apiUrl: string): Observable<object> {
     const url = `https://api.allorigins.win/get?url=${encodeURIComponent(
       apiUrl
     )}`;
     return this.http.get(url);
   }
 
-  getPodcastDetails(apiUrl: string, podcastId: string): Observable<any> {
+  getPodcastDetails(apiUrl: string, podcastId: string): Observable<object> {
     const url = `https://api.allorigins.win/get?url=${encodeURIComponent(
       `${apiUrl}/${podcastId}`
     )}`;
