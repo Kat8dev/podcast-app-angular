@@ -27,7 +27,7 @@
           class="card"
           *ngFor="let podcast of podcasts"
           (click)="onCardClick(podcast)"
-          [routerLink]="['details', podcast.id.attributes['im:id']]"
+          [routerLink]="['podcast', podcast.id.attributes['im:id']]"
         >
           <div class="image">
             <img mat-card-sm-image [src]="podcast['im:image'][0].label" />

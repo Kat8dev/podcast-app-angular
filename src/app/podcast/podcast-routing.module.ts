@@ -8,13 +8,17 @@ const routes: Routes = [
   {
     path: '',
     component: PodcastListComponent,
-    /*  children: [
-      { path: 'details', component: PodcastDetailsComponent },
-      { path: 'episodes', component: EpisodeDetailsComponent },
-    ], */
   },
-  { path: 'details/:id', component: PodcastDetailsComponent },
-  { path: 'episodes', component: EpisodeDetailsComponent },
+  {
+    path: 'podcast/:id',
+    component: PodcastDetailsComponent,
+    children: [
+      {
+        path: 'episodes/:episodeId',
+        component: EpisodeDetailsComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({

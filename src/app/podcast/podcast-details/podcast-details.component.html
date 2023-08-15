@@ -1,14 +1,12 @@
-<div class="details-wrapper">
+<router-outlet></router-outlet>
+<div *ngIf="!isChildRouteActive()" class="details-wrapper">
   <app-details-card class="left"></app-details-card>
 
   <div class="spinner" *ngIf="loading$ | async">
     <mat-spinner></mat-spinner>
   </div>
 
-  <div
-    *ngIf="!(error$ | async); else errorTemplate"
-    class="right"
-  >
+  <div *ngIf="!(error$ | async); else errorTemplate" class="right">
     <mat-card>
       <mat-card-content>Episodes {{ episodeNumber }}</mat-card-content>
     </mat-card>
@@ -17,7 +15,9 @@
       <ng-container matColumnDef="Title">
         <th mat-header-cell *matHeaderCellDef>Title</th>
         <td mat-cell *matCellDef="let element">
-          <span class="title">{{ element.trackName }}</span>
+          <span class="title" [routerLink]="['episodes', element.trackId]">{{
+            element.trackName
+          }}</span>
         </td>
       </ng-container>
 

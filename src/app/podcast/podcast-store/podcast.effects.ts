@@ -12,7 +12,7 @@ export class PodcastEffects {
     this.actions$.pipe(
       ofType(PodcastActions.loadPodcasts),
       mergeMap(() => {
-        const cachedPodcasts = this.getCachedPodcasts();
+        const cachedPodcasts = this.getCachedData('cachedPodcasts');
 
         if (cachedPodcasts) {
           return of(
@@ -22,7 +22,7 @@ export class PodcastEffects {
 
         return this.podcastService.getPodcasts(environment.podcastList).pipe(
           map((res) => res.feed.entry),
-          tap((podcasts) => this.cachePodcasts(podcasts)),
+          tap((podcasts) => this.cacheData(podcasts, 'cachedPodcasts')),
           map((podcasts) => PodcastActions.loadPodcastsSuccess({ podcasts })),
           catchError((error) =>
             of(PodcastActions.loadPodcastsFailure({ error }))
@@ -35,42 +35,50 @@ export class PodcastEffects {
   loadDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PodcastActions.loadDetails),
-      mergeMap((actions) =>
-        this.podcastService
-          .getPodcasts(
-            `${environment.podcastDetails}?id=${actions.podcastId}&media=podcast&entity=podcastEpisode`
+      mergeMap((actions) => {
+        const cachedDetails = this.getCachedData(`podcast${actions.podcastId}`);
+
+        if (cachedDetails) {
+          return of(
+            PodcastActions.loadDetailsSuccess({ details: cachedDetails })
+          );
+        }
+        return this.podcastService
+        .getPodcasts(
+          `${environment.podcastDetails}?id=${actions.podcastId}&media=podcast&entity=podcastEpisode`
+        )
+        .pipe(
+          map((res) => res.results),
+          tap((details) => this.cacheData(details, `podcast${actions.podcastId}`)),
+          map((details) => PodcastActions.loadDetailsSuccess({ details })),
+          catchError((error) =>
+            of(PodcastActions.loadDetailsFailure({ error }))
           )
-          .pipe(
-            map((res) => res.results),
-            map((details) => PodcastActions.loadDetailsSuccess({ details })),
-            catchError((error) =>
-              of(PodcastActions.loadDetailsFailure({ error }))
-            )
-          )
-      )
+        )
+      })
     )
   );
 
-  private getCachedPodcasts(): any[] | null {
-    const cachedData = localStorage.getItem('cachedPodcasts');
+  private getCachedData(value: string): any[] | null {
+    const cachedData = localStorage.getItem(value);
     if (cachedData) {
       const { data, timestamp } = JSON.parse(cachedData);
       const currentTime = new Date().getTime();
       if (currentTime - timestamp < 24 * 60 * 60 * 1000) {
         return data;
       } else {
-        localStorage.removeItem('cachedPodcasts');
+        localStorage.removeItem(value);
       }
     }
     return null;
   }
 
-  private cachePodcasts(podcasts: any[]): void {
+  private cacheData(data: any[], title: string): void {
     const cachedData = {
-      data: podcasts,
+      data: data,
       timestamp: new Date().getTime(),
     };
-    localStorage.setItem('cachedPodcasts', JSON.stringify(cachedData));
+    localStorage.setItem(title, JSON.stringify(cachedData));
   }
 
   constructor(

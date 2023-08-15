@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectDetails, selectDetailsError, selectDetailsLoading } from '../podcast-store/podcast.selectors';
+import {
+  selectDetails,
+  selectDetailsError,
+  selectDetailsLoading,
+} from '../podcast-store/podcast.selectors';
 import { loadDetails } from '../podcast-store/podcast.actions';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { PodcastService } from '../podcast.service';
-import { Observable } from 'rxjs';
+import { Observable, filter } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -12,7 +16,7 @@ export interface TableElement {
   trackName: string;
   releaseDate: string;
   duration: string;
-  allData: any; // TODO: find out which one is the url for listen music
+  trackId: number;
 }
 
 @Component({
@@ -22,7 +26,8 @@ export interface TableElement {
 })
 export class PodcastDetailsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['Title', 'Date', 'Duration'];
-  dataSource: MatTableDataSource<TableElement> = new MatTableDataSource<TableElement>();
+  dataSource: MatTableDataSource<TableElement> =
+    new MatTableDataSource<TableElement>();
   podcastId!: number;
   episodeNumber!: number;
   title$: Observable<string> = this.podcastService.currentTitle;
@@ -39,27 +44,41 @@ export class PodcastDetailsComponent implements OnInit, AfterViewInit {
     private store: Store,
     private route: ActivatedRoute,
     private podcastService: PodcastService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.podcastId = +params['id'];
       this.store.dispatch(loadDetails({ podcastId: this.podcastId }));
     });
 
-    this.store.select(selectDetails).subscribe(details => {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.updateChildRouteStatus();
+    });
+
+    this.store.select(selectDetails).subscribe((details) => {
       // Exclude the element at index 0
       const filteredDetails = details.slice(1);
       this.episodeNumber = filteredDetails.length;
-      console.log(filteredDetails)
       this.dataSource.data = filteredDetails.map((detail: any) => ({
         trackName: detail.trackName,
         releaseDate: this.formatDate(detail.releaseDate),
         duration: this.formatTime(detail.trackTimeMillis),
-        allData: detail
+        trackId: detail.trackId,
       }));
       this.dataSource.paginator = this.paginator;
     });
+  }
+
+  isChildRouteActive(): boolean {
+    return this.route.firstChild?.routeConfig?.path === 'episodes/:episodeId';
+  }
+
+  private updateChildRouteStatus(): void {
+    this.isChildRouteActive();
   }
 
   formatDate(dateString: string): string {
