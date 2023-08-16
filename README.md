@@ -1,4 +1,5 @@
 # Demo 
+  To view the live demo follow this link: 
   <a href="https://podcast-pet.netlify.app/podcasts" target="_blank">https://podcast-pet.netlify.app/podcasts</a>
 # PodcastApp
 Welcome to the Podcast App! This application allows you to discover and explore podcasts of various genres. You can listen to episodes, view podcast details, and more.
@@ -39,8 +40,6 @@ To start the application locally, follow these steps:
 - Run the following command to start the development server: ng serve  or ng serve --open
 
 ### Testing
-
-The application includes unit tests to ensure its functionality. To run the tests, follow these steps:
 
 1. Navigate to the project directory in your terminal.
 2. Run the following command to execute the unit tests via [Karma](https://karma-runner.github.io): ng test
