@@ -1,7 +1,7 @@
 # Demo 
-  https://podcast-pet.netlify.app/podcasts
+  <a href="https://podcast-pet.netlify.app/podcasts" target="_blank">https://podcast-pet.netlify.app/podcasts</a>
 # PodcastApp
-
+Welcome to the Podcast App! This application allows you to discover and explore podcasts of various genres. You can listen to episodes, view podcast details, and more.
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.4.
 
 ## Development server
