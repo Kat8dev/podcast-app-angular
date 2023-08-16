@@ -1,6 +1,7 @@
 # Demo 
   To view the live demo follow this link: 
   <a href="https://podcast-pet.netlify.app/podcasts" target="_blank">https://podcast-pet.netlify.app/podcasts</a>
+  <img src="./podcast-pet.netlify.app_podcasts.png" alt="Project image"/>
 # PodcastApp
 Welcome to the Podcast App! This application allows you to discover and explore podcasts of various genres. You can listen to episodes, view podcast details, and more.
 
