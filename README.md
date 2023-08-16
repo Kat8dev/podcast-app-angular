@@ -10,7 +10,7 @@ Welcome to the Podcast App! This application allows you to discover and explore 
   - [Running the Application](#running-the-application)
   - [Testing](#testing)
 - [Contributing](#contributing)
-- 
+
 ## Getting Started
 
 Welcome to Podcast app! This section will guide you through the steps to get the application up and running on your local machine.
